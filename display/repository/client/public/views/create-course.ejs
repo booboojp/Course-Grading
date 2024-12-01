@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Course</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f9;
+    }
+
+    header {
+        background-color: #007BFF;
+        padding: 1em;
+        text-align: center;
+    }
+
+    #search-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+        background-color: white;
+    }
+
+    #search-bar {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        font-size: 1rem;
+        outline: none;
+    }
+
+    #search-container button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #007BFF;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        border-left: 1px solid #ddd;
+    }
+
+    #search-container button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Main Section */
+    main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px;
+    }
+
+    section {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 10px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        margin-top: 0;
+        color: #333;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    ul li {
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    ul li:last-child {
+        border-bottom: none;
+    }
+
+    /* University name */
+    .name {
+        color: #333;
+    }
+
+    /* Rating styling */
+    .rating {
+        color: #555;
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+
+    button {
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #007BFF;
+        color: white;
+        margin-bottom: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    p {
+        margin: 15px 0;
+    }
+
+    /* Footer Styles */
+    footer {
+        text-align: center;
+        padding: 1em 0;
+        background-color: #007BFF;
+        color: white;
+        margin-top: 20px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .links section button {
+        display: block;
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+</style>
+<body>
+    <header>
+        <h1>Create a New Course</h1>
+    </header>
+    <main>
+        <section>
+            <form action="/course/create" method="POST">
+                <label for="name">Course Name:</label>
+                <input type="text" id="name" name="name" required><br><br>
+        
+                <label for="description">Description:</label>
+                <textarea id="description" name="description"></textarea><br><br>
+        
+                <label for="rating">Rating:</label>
+                <input type="number" step="0.1" id="rating" name="rating" required><br><br>
+        
+                <label for="college_id">College:</label>
+                <select id="college_id" name="college_id" required>
+                    <% colleges.forEach(college => { %>
+                        <option value="<%= college.id %>"><%= college.name %></option>
+                    <% }) %>
+                </select><br><br>
+        
+                <button type="submit">Create Course</button>
+            </form>
+            <br>
+            <button href="/search">Back to Search</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; <%= new Date().getFullYear() %> Comp Sci Compass</p>
+    </footer>
+</body>
+</html>

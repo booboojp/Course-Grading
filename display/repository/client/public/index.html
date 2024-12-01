@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Selector</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <form id="search-form">
+        <div id="search-container">
+            <input type="text" id="search-bar" placeholder="Search for a college...">
+            <button type="submit">Search</button>
+        </div>
+    </form>
+</header>
+
+<main>
+    <section id="courses-list">
+        <ul id="college-list">
+            <!-- Colleges will be dynamically inserted here -->
+        </ul>
+        <button id="load-more" type="button">Click to view more</button>
+        <button id="view-less" type="button" style="display: none;">Click to view less</button>
+    </section>
+
+    <section id="navigate-to-add">
+        <button onclick="window.location.href='/college/create';">Create College</button>
+    
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 Comp Sci Compass</p>
+</footer>
+
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const collegeList = document.getElementById('college-list');
+        const loadMoreButton = document.getElementById('load-more');
+        const viewLessButton = document.getElementById('view-less');
+
+        let collegesData = [];
+        let displayedColleges = 5;
+
+        // Fetch colleges from backend
+        fetch('http://localhost:6969/college/list')
+            .then(response => response.json())
+            .then(data => {
+                collegesData = data;
+                renderColleges();
+            })
+            .catch(error => {
+                console.error('Error fetching colleges:', error);
+            });
+
+        function renderColleges() {
+            collegeList.innerHTML = '';
+            collegesData.slice(0, displayedColleges).forEach((college, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="name">${index + 1}. ${college.name}</span>
+                    <span class="rating">${college.rating}/100</span>
+                `;
+                li.addEventListener('click', () => {
+                    window.location.href = `/college/id/${college.id}`;
+                });
+                collegeList.appendChild(li);
+            });
+
+            loadMoreButton.style.display = displayedColleges < collegesData.length ? 'block' : 'none';
+            viewLessButton.style.display = displayedColleges > 5 ? 'block' : 'none';
+        }
+
+        // Load more colleges
+        loadMoreButton.addEventListener('click', () => {
+            displayedColleges = collegesData.length;
+            renderColleges();
+        });
+
+        // View less colleges
+        viewLessButton.addEventListener('click', () => {
+            displayedColleges = 5;
+            renderColleges();
+        });
+    });
+</script> -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const collegeList = document.getElementById('college-list');
+    const loadMoreButton = document.getElementById('load-more');
+    const viewLessButton = document.getElementById('view-less');
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-bar');
+
+    let collegesData = [];
+    let filteredColleges = [];
+    let displayedColleges = 5;
+    fetch('http://localhost:6969/college/list')
+        .then(response => response.json())
+        .then(data => {
+            collegesData = data;
+            filteredColleges = data;
+            renderColleges();
+        })
+        .catch(error => {
+            console.error('Error fetching colleges:', error);
+        });
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        
+        if (searchTerm === '') {
+            filteredColleges = collegesData;
+        } else {
+            filteredColleges = collegesData.filter(college => 
+                college.name.toLowerCase().includes(searchTerm)
+            );
+        }
+        
+        displayedColleges = 5;
+        renderColleges();
+    });
+
+    function renderColleges() {
+        collegeList.innerHTML = '';
+        
+        if (filteredColleges.length === 0) {
+            collegeList.innerHTML = '<li>No colleges found matching your search.</li>';
+            loadMoreButton.style.display = 'none';
+            viewLessButton.style.display = 'none';
+            return;
+        }
+
+        filteredColleges.slice(0, displayedColleges).forEach((college, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span class="name">${index + 1}. ${college.name}</span>
+                <span class="rating">${college.rating}/100</span>
+            `;
+            li.addEventListener('click', () => {
+                window.location.href = `/college/id/${college.id}`;
+            });
+            collegeList.appendChild(li);
+        });
+
+        loadMoreButton.style.display = 
+            displayedColleges < filteredColleges.length ? 'block' : 'none';
+        viewLessButton.style.display = 
+            displayedColleges > 5 ? 'block' : 'none';
+    }
+
+    loadMoreButton.addEventListener('click', () => {
+        displayedColleges = filteredColleges.length;
+        renderColleges();
+    });
+
+    viewLessButton.addEventListener('click', () => {
+        displayedColleges = 5;
+        renderColleges();
+    });
+});
+</script>
+
+</body>
+</html>

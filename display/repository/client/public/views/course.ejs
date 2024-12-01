@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= course.name %></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #007BFF;
+            padding: 1em;
+            text-align: center;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        section {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #007BFF;
+            color: white;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><%= course.name %></h1>
+    </header>
+
+    <main>
+        <section>
+            <p><%= course.description %></p>
+            <p>Rating: <%= course.rating %>/100</p>
+        </section>
+        
+        <section class="button-container">
+            <button onclick="location.href='/college/id/<%= course.college_id %>'">Back to College</button>
+            <button onclick="location.href='/course/edit/<%= course.id %>'">Edit Course</button>
+            <form action="/course/delete/<%= course.id %>" method="POST" style="display: inline;">
+                <button type="submit">Delete Course</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; <%= new Date().getFullYear() %> Comp Sci Compass</p>
+    </footer>
+</body>
+</html>
