@@ -26,5 +26,3 @@ jobs:
       run: |
         npm install
         grunt
-        npm run backend
-        npm run frontend
