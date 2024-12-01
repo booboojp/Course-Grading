@@ -4,7 +4,7 @@ const app = express();
 const port = 4567;
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'public', 'views')); // Updated path
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
@@ -78,7 +78,6 @@ app.get('/college/name/:name', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
 app.post('/college/update-rating', async (req, res) => {
     const { name, newRating } = req.body;
     try {
@@ -136,6 +135,25 @@ app.post('/college/delete/:id', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+
+app.get('/course/id/:id', async (req, res) => {
+    const courseId = req.params.id;
+    try {
+        const course = await getCourseById(courseId);
+        if (course) {
+            res.render('course', { course });
+        } else {
+            res.status(404).send('Course not found');
+        }
+    } catch (error) {
+        console.error('Error fetching course:', error.message);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+
 app.get('/course/create', async (req, res) => {
     try {
         const response = await fetch('http://localhost:6969/college/list');
