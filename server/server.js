@@ -39,6 +39,36 @@ app.post('/college/create-college', async (req, res) => {
         res.status(500).json({ message: 'Error creating college' });
     }
 });
+app.post('/college/update-rating', async (req, res) => {
+    const { name, newRating } = req.body;
+    try {
+        await databaseFunctions.updateCollegeRating(name, newRating);
+        res.json({ message: `Updated rating for ${name} successfully` });
+    } catch (error) {
+        console.error('Error updating rating:', error.message);
+        res.status(500).json({ message: 'Error updating rating' });
+    }
+});
+app.post('/college/update', async (req, res) => {
+    const { id, name, location, banner_image, rating } = req.body;
+    try {
+        await databaseFunctions.updateCollege(id, name, location, banner_image, rating);
+        res.json({ message: `Updated college '${name}' successfully` });
+    } catch (error) {
+        console.error('Error updating college:', error.message);
+        res.status(500).json({ message: 'Error updating college' });
+    }
+});
+app.post('/college/delete', async (req, res) => {
+    const { id } = req.body;
+    try {
+        await databaseFunctions.deleteCollegeById(id);
+        res.json({ message: `Deleted college with ID ${id} successfully` });
+    } catch (error) {
+        console.error('Error deleting college:', error.message);
+        res.status(500).json({ message: 'Error deleting college' });
+    }
+});
 app.post('/college/delete-college', async (req, res) => {
     const { name } = req.body;
     try {
@@ -56,6 +86,17 @@ app.get('/college/id/:collegeId', async (req, res) => {
     const { collegeId } = req.params;
     try {
         await databaseFunctions.viewCollegeById(collegeId).then((college) => {
+            res.json(college);
+        });
+    } catch (error) {
+        console.error('Error getting college:', error.message);
+        res.status(500).json({ message: 'Error getting college' });
+    }
+});
+app.get('/college/name/:name', async (req, res) => {
+    const { name } = req.params;
+    try {
+        await databaseFunctions.viewCollegeByName(name).then((college) => {
             res.json(college);
         });
     } catch (error) {
@@ -82,7 +123,16 @@ app.get('/college/id/:collegeId/courses', async (req, res) => {
     }
 });
 
-
+app.post('/course/delete', async (req, res) => {
+    const { id } = req.body;
+    try {
+        await databaseFunctions.deleteCourseById(id);
+        res.json({ message: `Deleted course with ID ${id} successfully` });
+    } catch (error) {
+        console.error('Error deleting course:', error.message);
+        res.status(500).json({ message: 'Error deleting course' });
+    }
+});
 
 app.get('/courses', async (req, res) => {
     try {
@@ -103,6 +153,16 @@ app.post('/create-course', async (req, res) => {
     } catch (error) {
         console.error('Error creating course:', error.message);
         res.status(500).json({ message: 'Error creating course' });
+    }
+});
+app.post('/course/update', async (req, res) => {
+    const { id, name, description, rating, college_id } = req.body;
+    try {
+        await databaseFunctions.updateCourse(id, name, description, rating, college_id);
+        res.json({ message: `Updated course '${name}' successfully` });
+    } catch (error) {
+        console.error('Error updating course:', error.message);
+        res.status(500).json({ message: 'Error updating course' });
     }
 });
 // get course course/courseID

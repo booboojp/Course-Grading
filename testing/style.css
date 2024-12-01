@@ -1,0 +1,165 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+header {
+    background-color: #007BFF;
+    padding: 1em;
+    text-align: center;
+}
+
+/* Search Bar with Button Inside */
+#search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0; /* No gap between input and button */
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden; /* Ensure rounded corners are applied */
+    background-color: white; /* Background for the container */
+}
+
+#search-bar {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    font-size: 1rem;
+    outline: none; /* Remove input focus outline */
+}
+
+#search-container button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-left: 1px solid #ddd; /* Separator between input and button */
+}
+
+#search-container button:hover {
+    background-color: #0056b3;
+}
+
+/* Main Section */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+section {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+ul li:last-child {
+    border-bottom: none;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin: 8px 0 4px;
+    font-weight: bold;
+}
+
+input, select, button {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 1em 0;
+    background-color: #007BFF;
+    color: white;
+    margin-top: 20px;
+}
+
+
+/* General styling for the list */
+#college-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#college-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+}
+
+#college-list li:last-child {
+    margin-bottom: 0;
+}
+
+/* University name */
+#college-list .name {
+    
+    color: #333;
+}
+
+/* Rating styling */
+#college-list .rating {
+    color: #555;
+    font-size: 0.9rem;
+    font-weight: bold;
+}

@@ -187,30 +187,36 @@ async function deleteCollege(name) {
 }
 async function viewCollegeByName(name) {
     console.log('Viewing a college by name...');
-    const db = new sqlite3.Database('./database.db', (err) => {
-        if (err) {
-            console.error('Error opening database:', err.message);
-        } else {
-            try {
-                db.get(`SELECT * FROM colleges WHERE name = ?`, [name], (err, college) => {
-                    if (err) {
-                        console.error('Error retrieving college:', err.message);
-                    } else {
-                        console.log('college:', JSON.stringify(college, null, 2));
-                    }
-                });
-            } catch (error) {
-                console.error('Unexpected error:', error.message);
-            } finally {
-                db.close((err) => {
-                    if (err) {
-                        console.error('Error closing database:', err.message);
-                    } else {
-                        console.log('Database connection closed.');
-                    }
-                });
+    return new Promise((resolve, reject) => {
+        const db = new sqlite3.Database('./database.db', (err) => {
+            if (err) {
+                console.error('Error opening database:', err.message);
+                reject(err);
+            } else {
+                try {
+                    db.get(`SELECT * FROM colleges WHERE name = ?`, [name], (err, college) => {
+                        if (err) {
+                            console.error('Error retrieving college:', err.message);
+                            reject(err);
+                        } else {
+                            console.log('college:', JSON.stringify(college, null, 2));
+                            resolve(college);
+                        }
+                    });
+                } catch (error) {
+                    console.error('Unexpected error:', error.message);
+                    reject(error);
+                } finally {
+                    db.close((err) => {
+                        if (err) {
+                            console.error('Error closing database:', err.message);
+                        } else {
+                            console.log('Database connection closed.');
+                        }
+                    });
+                }
             }
-        }
+        });
     });
 }
 async function viewCollegeByLocation(location) {
@@ -391,6 +397,42 @@ async function updateCollegeRating(name, newRating) {
                 });
             }
         }
+    });
+}
+async function updateCollege(id, name, location, banner_image, rating) {
+    console.log('Updating college...');
+    return new Promise((resolve, reject) => {
+        const db = new sqlite3.Database('./database.db');
+        db.run(
+            `UPDATE colleges SET name = ?, location = ?, banner_image = ?, rating = ? WHERE id = ?`,
+            [name, location, banner_image, rating, id],
+            function(err) {
+                if (err) {
+                    console.error('Error updating college:', err.message);
+                    reject(err);
+                } else {
+                    console.log('College updated successfully.');
+                    resolve();
+                }
+                db.close();
+            }
+        );
+    });
+}
+async function deleteCollegeById(id) {
+    console.log('Deleting college...');
+    return new Promise((resolve, reject) => {
+        const db = new sqlite3.Database('./database.db');
+        db.run(`DELETE FROM colleges WHERE id = ?`, [id], function(err) {
+            if (err) {
+                console.error('Error deleting college:', err.message);
+                reject(err);
+            } else {
+                console.log('College deleted successfully.');
+                resolve();
+            }
+            db.close();
+        });
     });
 }
 
@@ -599,6 +641,43 @@ async function viewCourseById(id) {
         });
     });
 }
+async function updateCourse(id, name, description, rating, college_id) {
+    console.log('Updating course...');
+    return new Promise((resolve, reject) => {
+        const db = new sqlite3.Database('./database.db');
+        db.run(
+            `UPDATE courses SET name = ?, description = ?, rating = ?, college_id = ? WHERE id = ?`,
+            [name, description, rating, college_id, id],
+            function(err) {
+                if (err) {
+                    console.error('Error updating course:', err.message);
+                    reject(err);
+                } else {
+                    console.log('Course updated successfully.');
+                    resolve();
+                }
+                db.close();
+            }
+        );
+    });
+}
+async function deleteCourseById(id) {
+    console.log('Deleting course...');
+    return new Promise((resolve, reject) => {
+        const db = new sqlite3.Database('./database.db');
+        db.run(`DELETE FROM courses WHERE id = ?`, [id], function(err) {
+            if (err) {
+                console.error('Error deleting course:', err.message);
+                reject(err);
+            } else {
+                console.log('Course deleted successfully.');
+                resolve();
+            }
+            db.close();
+        });
+    });
+}
+
 
 
 
@@ -622,5 +701,9 @@ module.exports = {
     viewAllCourses,
     viewAllCoursesByCollegeId,
     viewCourseById,
-    updateCollegeRating
+    updateCollegeRating,
+    updateCourse,
+    updateCollege,
+    deleteCollegeById,
+    deleteCourseById
 };

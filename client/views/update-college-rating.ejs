@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update College Rating</title>
+    <style>
+        .valid {
+            background-color: lightgreen;
+        }
+    </style>
+</head>
+<body>
+    <h1>Update College Rating</h1>
+    <form id="update-rating-form">
+        <label for="name">College Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <div id="rating-container" style="display: none;">
+            <p>Current Rating: <span id="current-rating"></span></p>
+            <label for="new-rating">New Rating:</label>
+            <input type="number" id="new-rating" name="new-rating" min="0" max="100" required><br><br>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+    <a href="/search">Back to search</a>
+    <script>
+        document.getElementById('name').addEventListener('input', async function() {
+            const name = this.value;
+            if (name.length > 0) {
+                try {
+                    const response = await fetch(`/college/name/${name}`);
+                    const data = await response.json();
+                    if (data && data.name) {
+                        document.getElementById('current-rating').innerText = data.rating;
+                        document.getElementById('rating-container').style.display = 'block';
+                        this.classList.add('valid');
+                    } else {
+                        document.getElementById('rating-container').style.display = 'none';
+                        this.classList.remove('valid');
+                    }
+                } catch (error) {
+                    console.error('Error fetching college:', error);
+                    document.getElementById('rating-container').style.display = 'none';
+                    this.classList.remove('valid');
+                }
+            } else {
+                document.getElementById('rating-container').style.display = 'none';
+                this.classList.remove('valid');
+            }
+        });
+
+        document.getElementById('update-rating-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const newRating = document.getElementById('new-rating').value;
+            try {
+                const response = await fetch('/college/update-rating', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, newRating })
+                });
+                const result = await response.json();
+                alert(result.message);
+            } catch (error) {
+                console.error('Error updating rating:', error);
+            }
+        });
+    </script>
+</body>
+</html>
