@@ -37,7 +37,7 @@
     <p>&copy; 2024 Comp Sci Compass</p>
 </footer>
 
-<script>
+<!-- <script>
     document.addEventListener('DOMContentLoaded', () => {
         const collegeList = document.getElementById('college-list');
         const loadMoreButton = document.getElementById('load-more');
@@ -87,6 +87,90 @@
             renderColleges();
         });
     });
+</script> -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const collegeList = document.getElementById('college-list');
+    const loadMoreButton = document.getElementById('load-more');
+    const viewLessButton = document.getElementById('view-less');
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-bar');
+
+    let collegesData = [];
+    let filteredColleges = [];
+    let displayedColleges = 5;
+
+    // Fetch colleges from backend
+    fetch('http://localhost:6969/college/list')
+        .then(response => response.json())
+        .then(data => {
+            collegesData = data;
+            filteredColleges = data;
+            renderColleges();
+        })
+        .catch(error => {
+            console.error('Error fetching colleges:', error);
+        });
+
+    // Search form submission handler
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        
+        if (searchTerm === '') {
+            // Reset to show all colleges if search is empty
+            filteredColleges = collegesData;
+        } else {
+            // Filter colleges based on search term
+            filteredColleges = collegesData.filter(college => 
+                college.name.toLowerCase().includes(searchTerm)
+            );
+        }
+        
+        displayedColleges = 5;
+        renderColleges();
+    });
+
+    function renderColleges() {
+        collegeList.innerHTML = '';
+        
+        if (filteredColleges.length === 0) {
+            collegeList.innerHTML = '<li>No colleges found matching your search.</li>';
+            loadMoreButton.style.display = 'none';
+            viewLessButton.style.display = 'none';
+            return;
+        }
+
+        filteredColleges.slice(0, displayedColleges).forEach((college, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span class="name">${index + 1}. ${college.name}</span>
+                <span class="rating">${college.rating}/100</span>
+            `;
+            li.addEventListener('click', () => {
+                window.location.href = `/college/id/${college.id}`;
+            });
+            collegeList.appendChild(li);
+        });
+
+        loadMoreButton.style.display = 
+            displayedColleges < filteredColleges.length ? 'block' : 'none';
+        viewLessButton.style.display = 
+            displayedColleges > 5 ? 'block' : 'none';
+    }
+
+    // Load more colleges
+    loadMoreButton.addEventListener('click', () => {
+        displayedColleges = filteredColleges.length;
+        renderColleges();
+    });
+
+    // View less colleges
+    viewLessButton.addEventListener('click', () => {
+        displayedColleges = 5;
+        renderColleges();
+    });
+});
 </script>
 
 </body>
