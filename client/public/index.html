@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing.</title>
+</head>
+<body>
+    <h1>API Requester</h1>
+    <input type="text" id="urlParams" placeholder="Enter URL parameters">
+    <textarea id="requestBody" placeholder="Enter request body (optional)"></textarea>
+    <button onclick="makeRequest('GET')">GET</button>
+    <button onclick="makeRequest('POST')">POST</button>
+    <p id="output"></p>
+
+    <script>
+        function makeRequest(method) {
+            const urlParams = document.getElementById('urlParams').value;
+            const requestBody = document.getElementById('requestBody').value;
+            const url = `http://localhost:6969${urlParams}`;
+            const output = document.getElementById('output');
+
+            const options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            if (requestBody) {
+                options.body = requestBody;
+            }
+
+            fetch(url, options)
+                .then(response => response.text())
+                .then(data => {
+                    output.textContent = data;
+                })
+                .catch(error => {
+                    output.textContent = `Error: ${error}`;
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
