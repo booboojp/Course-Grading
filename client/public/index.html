@@ -3,44 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Testing.</title>
+    <title>Search</title>
 </head>
 <body>
-    <h1>API Requester</h1>
-    <input type="text" id="urlParams" placeholder="Enter URL parameters">
-    <textarea id="requestBody" placeholder="Enter request body (optional)"></textarea>
-    <button onclick="makeRequest('GET')">GET</button>
-    <button onclick="makeRequest('POST')">POST</button>
-    <p id="output"></p>
-
-    <script>
-        function makeRequest(method) {
-            const urlParams = document.getElementById('urlParams').value;
-            const requestBody = document.getElementById('requestBody').value;
-            const url = `http://localhost:6969${urlParams}`;
-            const output = document.getElementById('output');
-
-            const options = {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            };
-
-            if (requestBody) {
-                options.body = requestBody;
-            }
-
-            fetch(url, options)
-                .then(response => response.text())
-                .then(data => {
-                    output.textContent = data;
-                })
-                .catch(error => {
-                    output.textContent = `Error: ${error}`;
-                    console.error('Error:', error);
-                });
-        }
-    </script>
+    <h1>Colleges</h1>
+    <div id="colleges"></div>
+    <br>
+    <button onclick="window.location.href='/college/create'">Create College</button>
 </body>
 </html>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('http://localhost:6969/college/list')
+            .then(response => response.json())
+            .then(data => {
+                const collegesDiv = document.getElementById('colleges');
+                data.forEach(college => {
+                    const collegeElement = document.createElement('div');
+                    collegeElement.innerHTML = `
+                        <h2>${college.name}</h2>
+                        <p>Location: ${college.location}</p>
+                        <p>Rating: ${college.rating}</p>
+                    `;
+                    collegeElement.addEventListener('click', () => {
+                        window.location.href = `/college/id/${college.id}`;
+                    });
+                    collegesDiv.appendChild(collegeElement);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>

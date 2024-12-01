@@ -95,10 +95,10 @@ app.get('/courses', async (req, res) => {
     }
 });
 app.post('/create-course', async (req, res) => {
-    const { name, description, college_id } = req.body;
+    const { name, description, rating, college_id } = req.body;
     try {
         await databaseFunctions.createCoursesTable();
-        await databaseFunctions.createCourse(name, description, college_id);
+        await databaseFunctions.createCourse(name, description, rating, college_id);
         res.json({ message: `Created ${name} Course successfully` });
     } catch (error) {
         console.error('Error creating course:', error.message);

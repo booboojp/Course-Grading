@@ -365,6 +365,36 @@ async function viewAllColleges() {
         });
     });
 }
+async function updateCollegeRating(name, newRating) {
+    console.log('Updating college rating...');
+    const db = new sqlite3.Database('./database.db', (err) => {
+        if (err) {
+            console.error('Error opening database:', err.message);
+        } else {
+            try {
+                db.run(`UPDATE colleges SET rating = ? WHERE name = ?`, [newRating, name], (err) => {
+                    if (err) {
+                        console.error('Error updating college rating:', err.message);
+                    } else {
+                        console.log('College rating updated successfully.');
+                    }
+                });
+            } catch (error) {
+                console.error('Unexpected error:', error.message);
+            } finally {
+                db.close((err) => {
+                    if (err) {
+                        console.error('Error closing database:', err.message);
+                    } else {
+                        console.log('Database connection closed.');
+                    }
+                });
+            }
+        }
+    });
+}
+
+// edit database rating
 
 
 /**
@@ -385,6 +415,7 @@ async function createCoursesTable() {
                         name TEXT NOT NULL,
                         description TEXT,
                         college_id INTEGER,
+                        rating REAL NOT NULL,
                         FOREIGN KEY (college_id) REFERENCES colleges(id)
                     )`, (err) => {
                         if (err) {
@@ -409,14 +440,14 @@ async function createCoursesTable() {
     });
 }
 
-async function createCourse(name, description, college_id) {
+async function createCourse(name, description, rating, college_id) {
     console.log('Creating a new course...');
     const db = new sqlite3.Database('./database.db', (err) => {
         if (err) {
             console.error('Error opening database:', err.message);
         } else {
             try {
-                db.run(`INSERT INTO courses (name, description, college_id) VALUES (?, ?, ?)`, [name, description, college_id], (err) => {
+                db.run(`INSERT INTO courses (name, description, rating, college_id) VALUES (?, ?, ?, ?)`, [name, description, rating, college_id], (err) => {
                     if (err) {
                         console.error('Error creating course:', err.message);
                     } else {
@@ -590,5 +621,6 @@ module.exports = {
     deleteCourse,
     viewAllCourses,
     viewAllCoursesByCollegeId,
-    viewCourseById
+    viewCourseById,
+    updateCollegeRating
 };

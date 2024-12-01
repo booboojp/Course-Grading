@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= college.name %></title>
+</head>
+<body>
+    <h1><%= college.name %></h1>
+    <p>Location: <%= college.location %></p>
+    <p>Rating: <%= college.rating %></p>
+    <h2>Courses</h2>
+    <ul>
+        <% courses.forEach(course => { %>
+            <li>
+                <h3><a href="/course/id/<%= course.id %>"><%= course.name %></a></h3>
+                <p>Description: <%= course.description %></p>
+                <p>Rating: <%= course.rating %></p>
+            </li>
+        <% }) %>
+    </ul>
+    <a href="/search">Back to search</a>
+
+</body>
+</html>
