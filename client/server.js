@@ -47,13 +47,18 @@ app.get('/college/id/:id', async (req, res) => {
     }
 });
 
-app.get('/course/id/:id', async (req, res) => {
-    const courseId = req.params.id;
+app.get('/college/id/:id', async (req, res) => {
+    const collegeId = req.params.id;
     try {
-        const course = await getCourseById(courseId);
-        res.render('course', { course });
+        const college = await getCollegeById(collegeId);
+        const courses = await getCoursesByCollegeId(collegeId);
+        if (college) {
+            res.render('college', { college, courses });
+        } else {
+            res.status(404).send('College not found');
+        }
     } catch (error) {
-        console.error('Error fetching course:', error.message);
+        console.error('Error fetching college or courses:', error.message);
         res.status(500).send('Internal Server Error');
     }
 });
@@ -222,7 +227,7 @@ async function getCollegeById(id) {
         return college;
     } catch (error) {
         console.error('Error fetching college:', error.message);
-        return null;
+        return null; // Ensure null is returned on error
     }
 }
 

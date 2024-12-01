@@ -122,7 +122,21 @@ app.get('/college/id/:collegeId/courses', async (req, res) => {
         res.status(500).json({ message: 'Error getting courses' });
     }
 });
+app.get('/course/edit/:id', async (req, res) => {
+    const courseId = req.params.id;
+    try {
+        const courseResponse = await fetch(`http://localhost:6969/course/${courseId}`);
+        const course = await courseResponse.json();
 
+        const collegesResponse = await fetch('http://localhost:6969/college/list');
+        const colleges = await collegesResponse.json();
+
+        res.render('edit-course', { course, colleges });
+    } catch (error) {
+        console.error('Error fetching course or colleges:', error.message);
+        res.status(500).send('Internal Server Error');
+    }
+});
 app.post('/course/delete', async (req, res) => {
     const { id } = req.body;
     try {

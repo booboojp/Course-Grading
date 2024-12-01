@@ -1,3 +1,5 @@
+<!-- client/views/create-course.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,15 +26,8 @@
         </select><br><br>
 
         <button type="submit">Create Course</button>
-        <form action="/course/delete/<%= course.id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');">
-            <button type="submit">Delete Course</button>
-        </form>
-        <br>
-        <a href="/course/id/<%= course.id %>">Back to Course Details</a>
-        </body>
-        </html>
     </form>
+    <br>
     <a href="/search">Back to Search</a>
-    
 </body>
 </html>

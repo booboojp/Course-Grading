@@ -1,39 +1,93 @@
+<!-- client/public/index.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search</title>
+    <title>Course Selector</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Colleges</h1>
-    <div id="colleges"></div>
-    <br>
-    <button onclick="window.location.href='/college/create'">Create College</button>
-    <button onclick="window.location.href='/college/update-rating'">Update College Rating</button>
-</body>
-</html>
+
+<header>
+    <form id="search-form">
+        <div id="search-container">
+            <input type="text" id="search-bar" placeholder="Search for a college...">
+            <button type="submit">Search</button>
+        </div>
+    </form>
+</header>
+
+<main>
+    <section id="courses-list">
+        <ul id="college-list">
+            <!-- Colleges will be dynamically inserted here -->
+        </ul>
+        <button id="load-more" type="button">Click to view more</button>
+        <button id="view-less" type="button" style="display: none;">Click to view less</button>
+    </section>
+
+    <section id="navigate-to-add">
+        <button onclick="window.location.href='/college/create';">Create College</button>
+        <button onclick="window.location.href='/college/update-rating';">Update College Rating</button>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 Course Selector</p>
+</footer>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const collegeList = document.getElementById('college-list');
+        const loadMoreButton = document.getElementById('load-more');
+        const viewLessButton = document.getElementById('view-less');
+
+        let collegesData = [];
+        let displayedColleges = 5;
+
+        // Fetch colleges from backend
         fetch('http://localhost:6969/college/list')
             .then(response => response.json())
             .then(data => {
-                const collegesDiv = document.getElementById('colleges');
-                data.forEach(college => {
-                    const collegeElement = document.createElement('div');
-                    collegeElement.innerHTML = `
-                        <h2>${college.name}</h2>
-                        <p>Location: ${college.location}</p>
-                        <p>Rating: ${college.rating}</p>
-                    `;
-                    collegeElement.addEventListener('click', () => {
-                        window.location.href = `/college/id/${college.id}`;
-                    });
-                    collegesDiv.appendChild(collegeElement);
-                });
+                collegesData = data;
+                renderColleges();
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Error fetching colleges:', error);
             });
+
+        function renderColleges() {
+            collegeList.innerHTML = '';
+            collegesData.slice(0, displayedColleges).forEach((college, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="name">${index + 1}. ${college.name}</span>
+                    <span class="rating">${college.rating}/100</span>
+                `;
+                li.addEventListener('click', () => {
+                    window.location.href = `/college/id/${college.id}`;
+                });
+                collegeList.appendChild(li);
+            });
+
+            loadMoreButton.style.display = displayedColleges < collegesData.length ? 'block' : 'none';
+            viewLessButton.style.display = displayedColleges > 5 ? 'block' : 'none';
+        }
+
+        // Load more colleges
+        loadMoreButton.addEventListener('click', () => {
+            displayedColleges = collegesData.length;
+            renderColleges();
+        });
+
+        // View less colleges
+        viewLessButton.addEventListener('click', () => {
+            displayedColleges = 5;
+            renderColleges();
+        });
     });
 </script>
+
+</body>
+</html>

@@ -1,31 +1,29 @@
+<!-- client/views/create-college.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Edit College</title>
+    <title>Create College</title>
 </head>
 <body>
-    <h1>Edit College</h1>
-    <form action="/college/edit/<%= college.id %>" method="POST">
+    <h1>Create College</h1>
+    <form action="/college/create" method="POST">
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" value="<%= college.name %>" required><br><br>
+        <input type="text" id="name" name="name" required><br><br>
 
         <label for="location">Location:</label>
-        <input type="text" id="location" name="location" value="<%= college.location %>" required><br><br>
+        <input type="text" id="location" name="location" required><br><br>
 
         <label for="banner_image">Banner Image URL:</label>
-        <input type="text" id="banner_image" name="banner_image" value="<%= college.banner_image %>" required><br><br>
+        <input type="text" id="banner_image" name="banner_image"><br><br>
 
         <label for="rating">Rating:</label>
-        <input type="number" step="0.1" id="rating" name="rating" value="<%= college.rating %>" required><br><br>
+        <input type="number" step="0.1" id="rating" name="rating"><br><br>
 
-        <button type="submit">Update College</button>
+        <button type="submit">Create College</button>
     </form>
     <br>
-    <form action="/college/delete/<%= college.id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this college?');">
-        <button type="submit">Delete College</button>
-    </form>
-    <br>
-    <a href="/college/id/<%= college.id %>">Back to College Details</a>
+    <a href="/search">Back to Search</a>
 </body>
 </html>
