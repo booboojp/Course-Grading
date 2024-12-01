@@ -1,5 +1,3 @@
-<!-- client/public/index.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,8 +97,6 @@
     let collegesData = [];
     let filteredColleges = [];
     let displayedColleges = 5;
-
-    // Fetch colleges from backend
     fetch('http://localhost:6969/college/list')
         .then(response => response.json())
         .then(data => {
@@ -111,17 +107,13 @@
         .catch(error => {
             console.error('Error fetching colleges:', error);
         });
-
-    // Search form submission handler
     searchForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const searchTerm = searchInput.value.toLowerCase().trim();
         
         if (searchTerm === '') {
-            // Reset to show all colleges if search is empty
             filteredColleges = collegesData;
         } else {
-            // Filter colleges based on search term
             filteredColleges = collegesData.filter(college => 
                 college.name.toLowerCase().includes(searchTerm)
             );
@@ -159,13 +151,11 @@
             displayedColleges > 5 ? 'block' : 'none';
     }
 
-    // Load more colleges
     loadMoreButton.addEventListener('click', () => {
         displayedColleges = filteredColleges.length;
         renderColleges();
     });
 
-    // View less colleges
     viewLessButton.addEventListener('click', () => {
         displayedColleges = 5;
         renderColleges();

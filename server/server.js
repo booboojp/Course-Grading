@@ -179,7 +179,6 @@ app.post('/course/update', async (req, res) => {
         res.status(500).json({ message: 'Error updating course' });
     }
 });
-// get course course/courseID
 app.get('/course/:courseId', async (req, res) => {
     const { courseId } = req.params;
     try {

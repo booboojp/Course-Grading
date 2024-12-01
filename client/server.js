@@ -245,7 +245,7 @@ async function getCollegeById(id) {
         return college;
     } catch (error) {
         console.error('Error fetching college:', error.message);
-        return null; // Ensure null is returned on error
+        return null; 
     }
 }
 
